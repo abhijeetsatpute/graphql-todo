@@ -1,10 +1,9 @@
 import { MONGO_URI, PORT } from "./config";
-import { createApp } from "./createApp";
+import { startServer } from "./startServer";
 import { connectDB } from "./db/connect";
 
-const app = createApp();
-
 const start = async () => {
+  const app = await startServer();
   const appPort = PORT || 5000;
   try {
     if (!MONGO_URI) {
