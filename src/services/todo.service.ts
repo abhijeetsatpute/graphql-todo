@@ -20,7 +20,10 @@ export const updateTodo = async (
   id: string,
   updates: any
 ): Promise<TodoType | null> => {
-  return await Todo.findByIdAndUpdate(id, updates, { new: true });
+  return await Todo.findByIdAndUpdate(id, updates, {
+    new: true,
+    runValidators: true,
+  });
 };
 
 export const deleteTodo = async (id: string): Promise<TodoType | null> => {
