@@ -8,14 +8,46 @@ import {
 
 export const TodoResolver = {
   Query: {
-    getTodos: () => getAllTodos(),
-    getTodo: (parent: any, { id }: { id: string }) => getTodo(id),
+    getTodos: async () => {
+      try {
+        return await getAllTodos();
+      } catch (error) {
+        throw new Error(`Failed to fetch todos: ${error}`);
+      }
+    },
+    getTodo: async (parent: any, { id }: { id: string }) => {
+      try {
+        return await getTodo(id);
+      } catch (error) {
+        throw new Error(`Failed to fetch todo with id ${id}: ${error}`);
+      }
+    },
   },
   Mutation: {
-    createTodo: (parent: any, args: { title: string; description: string }) =>
-      createTodo(args.title, args.description),
-    updateTodo: (parent: any, args: { id: string; updates: any }) =>
-      updateTodo(args.id, args.updates),
-    deleteTodo: (parent: any, args: { id: string }) => deleteTodo(args.id),
+    createTodo: async (
+      parent: any,
+      args: { title: string; description: string }
+    ) => {
+      try {
+        return await createTodo(args.title, args.description);
+      } catch (error) {
+        throw new Error(`Failed to create todo: ${error}`);
+      }
+    },
+    updateTodo: async (parent: any, args: { id: string; updates: any }) => {
+      try {
+        return await updateTodo(args.id, args.updates);
+      } catch (error) {
+        throw new Error(`Failed to update todo with id ${args.id}: ${error}`);
+      }
+    },
+    deleteTodo: async (parent: any, args: { id: string }) => {
+      try {
+        await deleteTodo(args.id);
+        return `Todo with id ${args.id} deleted successfully`;
+      } catch (error) {
+        throw new Error(`Failed to delete todo with id ${args.id}: ${error}`);
+      }
+    },
   },
 };
