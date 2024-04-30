@@ -1,3 +1,4 @@
+import { GraphQLError } from "graphql";
 import {
   getAllTodos,
   getTodo,
@@ -5,6 +6,7 @@ import {
   updateTodo,
   deleteTodo,
 } from "../services/todo.service";
+import logger from "../logger";
 
 export const TodoResolver = {
   Query: {
@@ -12,14 +14,16 @@ export const TodoResolver = {
       try {
         return await getAllTodos();
       } catch (error) {
-        throw new Error(`Failed to fetch todos: ${error}`);
+        logger.error(error);
+        throw new GraphQLError(`Failed to fetch todos: ${error}`);
       }
     },
     getTodo: async (parent: any, { id }: { id: string }) => {
       try {
         return await getTodo(id);
       } catch (error) {
-        throw new Error(`Failed to fetch todo with id ${id}: ${error}`);
+        logger.error(error);
+        throw new GraphQLError(`Failed to fetch todo by id ${id}: ${error}`);
       }
     },
   },
@@ -31,14 +35,18 @@ export const TodoResolver = {
       try {
         return await createTodo(args.title, args.description);
       } catch (error) {
-        throw new Error(`Failed to create todo: ${error}`);
+        logger.error(error);
+        throw new GraphQLError(`Failed to create todo: ${error}`);
       }
     },
     updateTodo: async (parent: any, args: { id: string; updates: any }) => {
       try {
         return await updateTodo(args.id, args.updates);
       } catch (error) {
-        throw new Error(`Failed to update todo with id ${args.id}: ${error}`);
+        logger.error(error);
+        throw new GraphQLError(
+          `Failed to update todo by id ${args.id}: ${error}`
+        );
       }
     },
     deleteTodo: async (parent: any, args: { id: string }) => {
@@ -46,7 +54,10 @@ export const TodoResolver = {
         await deleteTodo(args.id);
         return `Todo with id ${args.id} deleted successfully`;
       } catch (error) {
-        throw new Error(`Failed to delete todo with id ${args.id}: ${error}`);
+        logger.error(error);
+        throw new GraphQLError(
+          `Failed to delete todo by id ${args.id}: ${error}`
+        );
       }
     },
   },

@@ -1,18 +1,16 @@
-import express from "express";
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
+import { startStandaloneServer } from "@apollo/server/standalone";
 import { TodoSchema } from "./schemas/todo.schema";
 import { TodoResolver } from "./resolvers/todo.resolver";
+import { portNumber } from "./config";
 
 export async function startServer() {
-  const app = express();
   const server = new ApolloServer({
     typeDefs: [TodoSchema],
     resolvers: [TodoResolver],
   });
-  await server.start();
 
-  app.use(express.json());
-  app.use("/graphql", expressMiddleware(server));
-  return app;
+  return startStandaloneServer(server, {
+    listen: { port: portNumber },
+  });
 }

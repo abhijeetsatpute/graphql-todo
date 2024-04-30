@@ -1,20 +1,19 @@
 import { MONGO_URI, PORT } from "./config";
 import { startServer } from "./startServer";
 import { connectDB } from "./db/connect";
+import logger from "./logger";
+import { GraphQLError } from "graphql";
 
 const start = async () => {
-  const app = await startServer();
-  const appPort = PORT || 5000;
   try {
     if (!MONGO_URI) {
-      throw new Error("MONGO_URI is not defined");
+      throw new GraphQLError("MONGO_URI is not defined");
     }
     await connectDB(MONGO_URI);
-    app.listen(appPort, async () => {
-      console.log(`Running on Port ${appPort}`);
-    });
+    const { url } = await startServer();
+    console.log(`🚀  Server ready at: ${url}`);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 
