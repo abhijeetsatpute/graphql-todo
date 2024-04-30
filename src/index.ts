@@ -1,4 +1,4 @@
-import { MONGO_URI, PORT } from "./config";
+import { MONGO_URI } from "./config";
 import { startServer } from "./startServer";
 import { connectDB } from "./db/connect";
 import logger from "./logger";
