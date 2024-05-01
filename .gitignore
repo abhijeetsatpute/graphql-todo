@@ -5,3 +5,5 @@ coverage
 
 combined.log
 error.log
+
+.build
