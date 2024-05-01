@@ -12,5 +12,7 @@ functions:
       - httpApi:
           path: /graphql
           method: POST
+    environment:
+      MONGO_URI: ${env:MONGO_URI}
 plugins:
   - serverless-plugin-typescript
